@@ -7,7 +7,9 @@ class Heap:
     self._bubble_up(len(self.storage)-1)
 
   def delete(self):
-    pass
+    current = self.storage.pop(0)
+    self._sift_down(0)
+    return current
 
   def get_max(self):
     return self.storage[0]
@@ -33,14 +35,16 @@ class Heap:
       
 
   def _sift_down(self, index):
-    # loop until either the element reaches the end of the array
-    # or we'll break the loop
-    while index > 0:
-      left_child = (2 * index) + 1
-      right_child = (2 * index) + 2
-      if self.storage[left_child] > self.storage[right_child] and self.storage[left_child] > self.storage[index]:
-        self.storage[index], self.storage[left_child] = self.storage[left_child], self.storage[index]
-      elif self.storage[right_child] > self.storage[left_child] and self.storage[right_child] > self.storage[index]:
-        self.storage[index], self.storage[right_child] = self.storage[right_child], self.storage[index]
+    while index  * 2 + 1 <= len(self.storage) - 1:
+      if (index * 2) + 2 > len(self.storage) - 1:
+        biggest = (index * 2) + 1
+      elif self.storage[(index * 2) + 1] > self.storage[(index * 2) + 2]:
+        biggest = (index * 2) + 1
       else:
-        break
+        biggest = (index * 2) + 2
+      
+      if self.storage[biggest] > self.storage[index]:
+        current = self.storage[biggest]
+        self.storage[biggest] = self.storage[index]
+        self.storage[index] = current
+      index = biggest
